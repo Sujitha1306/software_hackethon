@@ -118,7 +118,7 @@ def select_categories(df):
     selected_categories = [categories[int(i) - 1] for i in selected_categories.split(",") if i.isdigit() and 1 <= int(i) <= len(categories)]
 
     if not selected_categories:
-        print("⚠️ Invalid selection. Using all categories by default.")
+        print("⚠️ invalid selection. Using all categories by default.")
         return df
 
     print(f"\n✅ Selected Categories: {', '.join(selected_categories)}")
@@ -178,5 +178,4 @@ vectorizer.fit(df['Answer'].tolist())
 joblib.dump(vectorizer, "tfidf_model.pkl")
 vectorizer = joblib.load("tfidf_model.pkl")
 
-# Run the interactive voice-powered quiz
 run_mock_test(df, vectorizer)
