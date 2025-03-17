@@ -118,7 +118,7 @@ def select_categories(df):
     selected_categories = [categories[int(i) - 1] for i in selected_categories.split(",") if i.isdigit() and 1 <= int(i) <= len(categories)]
 
     if not selected_categories:
-        print("⚠️ invalid selection. Using all categories by defaul")
+        print("⚠️ invalid selection. Using all categories by")
         return df
 
     print(f"\n✅ Selected Categories: {', '.join(selected_categories)}")
