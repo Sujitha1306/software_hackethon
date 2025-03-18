@@ -1,0 +1,48 @@
+# Ignore dataset and large files
+traindata.csv
+*.csv
+*.tsv
+*.xlsx
+*.json
+*.parquet
+
+# Ignore compressed and archive files
+*.zip
+*.tar.gz
+*.rar
+*.7z
+
+# Ignore backup and temp files
+*.bak
+*.tmp
+*.swp
+.DS_Store
+Thumbs.db
+
+# Ignore Python cache and virtual environment
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.venv/
+venv/
+
+# Ignore Node.js dependencies
+node_modules/
+npm-debug.log
+package-lock.json
+
+# Ignore environment and build files
+.env
+.env.*
+/dist
+/build
+/out
+
+# Ignore IDE/editor files
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln

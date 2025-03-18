@@ -4,16 +4,16 @@ import pyttsx3
 import speech_recognition as sr
 import joblib
 import difflib
-from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
+
+# 🎯 Load Sentiment Model and Vectorizer
+model_sentiment = joblib.load("sentiment_model.pkl")
+vectorizer_sentiment = joblib.load("vectorizer_sentiment.pkl")
 
 # Initialize Text-to-Speech engine
 tts_engine = pyttsx3.init()
 tts_engine.setProperty('rate', 150)
-
-# Initialize Sentiment Analyzer
-sentiment_analyzer = SentimentIntensityAnalyzer()
 
 # Initialize Speech Recognizer
 recognizer = sr.Recognizer()
@@ -24,7 +24,7 @@ def speak(text):
     tts_engine.runAndWait()
 
 def start_recording():
-    """Begins recording the user's answer."""
+    """Begins recording the user's answer and shows a live transcript."""
     with sr.Microphone() as source:
         print("\n🎤 Recording started... Speak your answer!")
         speak("Recording started. Please speak your answer.")
@@ -37,11 +37,12 @@ def start_recording():
             return None
 
 def process_audio(audio):
-    """Converts recorded audio to text."""
+    """Converts recorded audio to text and shows live transcript."""
     if audio:
         try:
+            print("🔎 Processing audio...")
             text = recognizer.recognize_google(audio)
-            print(f"🔊 You said: {text}")
+            print(f"✅ Live Transcript: {text}")
             return text
         except sr.UnknownValueError:
             print("❌ Could not understand the speech.")
@@ -50,26 +51,26 @@ def process_audio(audio):
     return "I don't know"
 
 def analyze_sentiment(text):
-    """Performs sentiment analysis."""
+    """Performs sentiment analysis using the trained Naive Bayes model."""
     negative_phrases = ["i don't know", "no idea", "not sure", "i have no clue"]
     if any(phrase in text.lower() for phrase in negative_phrases):
         return "Negative 😟", -1.0  
 
-    sentiment_score = sentiment_analyzer.polarity_scores(text)
-    compound = sentiment_score['compound']
+    # Transform the user input using the trained TF-IDF vectorizer
+    text_vec = vectorizer_sentiment.transform([text])
     
-    if compound >= 0.5:
-        sentiment = "Very Positive 😊"
-    elif compound >= 0.2:
+    # Predict sentiment (0 = Negative, 1 = Positive)
+    sentiment_prediction = model_sentiment.predict(text_vec)[0]
+    
+    # Convert prediction to sentiment label
+    if sentiment_prediction == 1:
         sentiment = "Positive 🙂"
-    elif compound > -0.2:
-        sentiment = "Neutral 😐"
-    elif compound > -0.5:
-        sentiment = "Negative 😠"
+        sentiment_score = 1.0
     else:
-        sentiment = "Very Negative 😡"
+        sentiment = "Negative 😠"
+        sentiment_score = -1.0
 
-    return sentiment, compound
+    return sentiment, sentiment_score
 
 def combined_similarity(user_answer, correct_answer, vectorizer):
     """Computes combined similarity (TF-IDF + fuzzy matching)."""
@@ -79,16 +80,27 @@ def combined_similarity(user_answer, correct_answer, vectorizer):
     diff_sim = difflib.SequenceMatcher(None, user_answer.lower(), correct_answer.lower()).ratio()
     return (cosine_sim + diff_sim) / 2, cosine_sim, diff_sim
 
+def get_user_input():
+    """Asks the user to choose between voice or text input."""
+    while True:
+        choice = input("\n🎙️ Choose input mode: \n1. Voice \n2. Text\n➡️ Enter 1 or 2: ")
+        if choice == "1":
+            audio = start_recording()
+            user_answer = process_audio(audio)
+            return user_answer
+        elif choice == "2":
+            user_answer = input("⌨️ Enter your answer: ")
+            return user_answer
+        else:
+            print("⚠️ Invalid choice. Please enter 1 for voice or 2 for text.")
+
 def ask_question(question, correct_answer, vectorizer, threshold=0.5):
     """Asks a question, records and analyzes the answer, and provides feedback."""
     print("\n📝 Question:", question)
     speak(question)
     
-    input("🔴 Press Enter to start recording...")
-    audio = start_recording()
-    input("⏹️ Press Enter to stop recording and analyze...")
-    
-    user_answer = process_audio(audio)
+    # Get user's input (voice or text)
+    user_answer = get_user_input()
     
     sentiment, sentiment_score = analyze_sentiment(user_answer)
     sim, cosine_sim, diff_sim = combined_similarity(user_answer, correct_answer, vectorizer)
@@ -118,7 +130,7 @@ def select_categories(df):
     selected_categories = [categories[int(i) - 1] for i in selected_categories.split(",") if i.isdigit() and 1 <= int(i) <= len(categories)]
 
     if not selected_categories:
-        print("⚠️ invalid selection. Using all categories by default.")
+        print("⚠️ Invalid selection. Using all categories by default.")
         return df
 
     print(f"\n✅ Selected Categories: {', '.join(selected_categories)}")
@@ -172,10 +184,7 @@ def run_mock_test(df, vectorizer):
 # Load dataset (Ensure CSV has "Category" column)
 df = pd.read_csv("SoftwareQuestions.csv", encoding="ISO-8859-1")
 
-# Train or load the TF-IDF model
-vectorizer = TfidfVectorizer()
-vectorizer.fit(df['Answer'].tolist())
-joblib.dump(vectorizer, "tfidf_model.pkl")
+# ✅ Load the TF-IDF vectorizer for question-answer similarity
 vectorizer = joblib.load("tfidf_model.pkl")
 
 run_mock_test(df, vectorizer)
