@@ -13,7 +13,7 @@ vectorizer_sentiment = joblib.load("vectorizer_sentiment.pkl")
 
 # Initialize Text-to-Speech engine
 tts_engine = pyttsx3.init()
-tts_engine.setProperty('rate', 150)
+tts_engine.setProperty('rate', 130)
 
 # Initialize Speech Recognizer
 recognizer = sr.Recognizer()
@@ -28,13 +28,30 @@ def start_recording():
     with sr.Microphone() as source:
         print("\n🎤 Recording started... Speak your answer!")
         speak("Recording started. Please speak your answer.")
-        try:
-            audio = recognizer.listen(source, timeout=10)
-            print("⏹️ Recording stopped.")
-            return audio
-        except sr.WaitTimeoutError:
-            print("⏹️ No speech detected. Stopping recording.")
-            return None
+        audio = None
+        while True:
+            try:
+                print("⏺️ Recording... (Say 'stop' to end recording)")
+                audio = recognizer.listen(source, phrase_time_limit=5)  # Record in chunks of 5 seconds
+                text = recognizer.recognize_google(audio)
+                print(f"✅ Live Transcript: {text}")
+                
+                # Ask user if they want to stop or re-record
+                user_choice = input("\n🔹 Do you want to: \n1. Stop and analyze \n2. Re-record \n➡️ Enter 1 or 2: ")
+                if user_choice == "1":
+                    print("⏹️ Recording stopped.")
+                    return audio, text
+                elif user_choice == "2":
+                    print("🔄 Re-recording...")
+                    continue
+                else:
+                    print("⚠️ Invalid choice. Continuing recording.")
+            except sr.UnknownValueError:
+                print("❌ Could not understand the speech. Please try again.")
+                continue
+            except sr.WaitTimeoutError:
+                print("⏹️ No speech detected. Continuing recording.")
+                continue
 
 def process_audio(audio):
     """Converts recorded audio to text and shows live transcript."""
@@ -42,7 +59,7 @@ def process_audio(audio):
         try:
             print("🔎 Processing audio...")
             text = recognizer.recognize_google(audio)
-            print(f"✅ Live Transcript: {text}")
+            print(f"✅ Final Transcript: {text}")
             return text
         except sr.UnknownValueError:
             print("❌ Could not understand the speech.")
@@ -85,8 +102,7 @@ def get_user_input():
     while True:
         choice = input("\n🎙️ Choose input mode: \n1. Voice \n2. Text\n➡️ Enter 1 or 2: ")
         if choice == "1":
-            audio = start_recording()
-            user_answer = process_audio(audio)
+            audio, user_answer = start_recording()
             return user_answer
         elif choice == "2":
             user_answer = input("⌨️ Enter your answer: ")

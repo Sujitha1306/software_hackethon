@@ -108,7 +108,7 @@ Question Number,Question,Answer,Category,Difficulty
 107,What is continuous integration in DevOps?,Continuous integration is the practice of automating the integration of code changes into a software project.,DevOps,Medium
 108,How do you implement a binary search algorithm?,"Binary search involves repeatedly dividing in half the portion of the list that could contain the item, until you've narrowed the possibilities to just one.",Full-stack,Medium
 109,Describe the MVC architecture.,"MVC architecture stands for Model-View-Controller, separating the application into three interconnected components.",Full-stack,Medium
-110,What are microservices and how do they differ from monolithic architectures?,"Microservices are a software development technique—a variant of the service-oriented architecture architectural style that structures an application as a collection of loosely coupled services. In a monolithic architecture, all components are interconnected and interdependent.",Back-end,Medium
+110,What are microservices and how do they differ from monolithic architectures?,"Microservices are a software development techniqueï¿½a variant of the service-oriented architecture architectural style that structures an application as a collection of loosely coupled services. In a monolithic architecture, all components are interconnected and interdependent.",Back-end,Medium
 111,Explain the difference between '==' and '===' in JavaScript.,"'==' compares values after type conversion, while '===' compares both value and type.",Front-end,Hard
 112,What is Kubernetes and how does it relate to containerization?,"Kubernetes is an open-source platform for automating deployment, scaling, and operations of application containers across clusters of hosts.",DevOps,Medium
 113,Describe how you would implement a RESTful API in a back-end application.,"A RESTful API is implemented by setting up HTTP routes (GET, POST, PUT, DELETE) and handling requests and responses in a stateless manner, often using JSON.",Back-end,Medium
@@ -132,7 +132,7 @@ Question Number,Question,Answer,Category,Difficulty
 131,What is continuous integration in DevOps?,Continuous integration is the practice of automating the integration of code changes into a software project.,DevOps,Medium
 132,How do you implement a binary search algorithm?,"Binary search involves repeatedly dividing in half the portion of the list that could contain the item, until you've narrowed the possibilities to just one.",Full-stack,Medium
 133,Describe the MVC architecture.,"MVC architecture stands for Model-View-Controller, separating the application into three interconnected components.",Full-stack,Medium
-134,What are microservices and how do they differ from monolithic architectures?,"Microservices are a software development technique—a variant of the service-oriented architecture architectural style that structures an application as a collection of loosely coupled services. In a monolithic architecture, all components are interconnected and interdependent.",Back-end,Hard
+134,What are microservices and how do they differ from monolithic architectures?,"Microservices are a software development techniqueï¿½a variant of the service-oriented architecture architectural style that structures an application as a collection of loosely coupled services. In a monolithic architecture, all components are interconnected and interdependent.",Back-end,Hard
 135,Explain the difference between '==' and '===' in JavaScript.,"'==' compares values after type conversion, while '===' compares both value and type.",Front-end,Easy
 136,What is Kubernetes and how does it relate to containerization?,"Kubernetes is an open-source platform for automating deployment, scaling, and operations of application containers across clusters of hosts.",DevOps,Hard
 137,Describe how you would implement a RESTful API in a back-end application.,"A RESTful API is implemented by setting up HTTP routes (GET, POST, PUT, DELETE) and handling requests and responses in a stateless manner, often using JSON.",Back-end,Medium
@@ -199,3 +199,133 @@ Question Number,Question,Answer,Category,Difficulty
 198,Implement a quantum algorithm for solving a well-known computational problem.,"Discuss quantum computing principles, qubit manipulation, and specific algorithms like Grover's or Shor's algorithm.",Algorithms,Hard
 199,Design a secure mobile payment system for developing countries.,"Focus on security protocols, offline capabilities, user authentication, and low-resource optimizations.",Security,Hard
 200,Build a scalable image processing pipeline for a photo-sharing app.,"Implement distributed processing, efficient storage, and consider ML techniques for feature extraction.",System Design,Hard
+201,What is the difference between compilation and interpretation?,Compilation translates source code into machine code creating an executable file. Interpretation translates and executes code line by line without an executable.,General Programming,Medium
+202,Explain the concept of polymorphism.,"Polymorphism allows objects of different classes to be treated as objects of a common superclass, enabling method overriding.",General Programming,Medium
+203,Define encapsulation and give an example.,"Encapsulation bundles data and methods in a class, restricting direct data access. Example: class with private data and public methods.",General Programming,Hard
+204,What is an abstract class, and how is it different from an interface?,An abstract class can't be instantiated and can have abstract and concrete methods. An interface only has method signatures without implementations.,General Programming,Medium
+205,Describe the principles of Object-Oriented Programming (OOP).,"OOP principles include encapsulation, inheritance, polymorphism, and abstraction, promoting organized and maintainable code.",General Programming,Medium
+206,What is a linked list and how does it differ from an array?,A linked list stores elements with pointers to the next node, unlike arrays which store elements in contiguous memory.,Data Structures,Medium
+207,Explain the difference between stack and queue.,Stack follows LIFO (Last In, First Out), whereas queue follows FIFO (First In, First Out).,Data Structures,Easy
+208,What is binary search and how does it work?,Binary search divides a sorted list into halves, eliminating one half at each step until the target is found.,Algorithms,Medium
+209,Define a hash table and its applications.,A hash table maps keys to values using a hash function for fast data retrieval, commonly used in dictionaries.,Data Structures,Medium
+210,What is dynamic programming and how does it differ from recursion?,Dynamic programming optimizes overlapping subproblems by storing results, while recursion repeatedly computes solutions.,Algorithms,Hard
+211,What is REST API and how does it work?,REST API uses HTTP methods to perform CRUD operations on resources and returns responses in JSON or XML format.,Web Development,Easy
+212,Explain the concept of middleware in web frameworks.,Middleware handles requests before they reach the server and modifies responses before they return to the client.,Web Development,Medium
+213,What is a foreign key in SQL and how does it maintain referential integrity?,A foreign key links records in one table to another and prevents invalid data by enforcing referential integrity.,Database and SQL,Medium
+214,What are SQL joins and their types?,SQL joins combine data from multiple tables. Types include INNER, LEFT, RIGHT, and FULL JOIN.,Database and SQL,Medium
+215,What is normalization in database design?,Normalization organizes data to reduce redundancy and dependency by dividing tables logically.,Database and SQL,Hard
+216,What is the difference between functional and non-functional testing?,Functional testing verifies what the system should do, while non-functional testing evaluates performance, usability, and reliability.,Software Testing,Easy
+217,Explain continuous integration and continuous deployment (CI/CD).,CI automates code integration and testing, while CD automates delivery and deployment.,DevOps,Medium
+218,What is version control and why is Git preferred?,Version control tracks code changes, and Git is preferred for its distributed architecture and branching features.,Version Control,Easy
+219,What are design patterns and why are they used?,Design patterns provide reusable solutions to common software design problems.,System Design,Medium
+220,Explain the concept of microservices architecture.,Microservices break an application into loosely coupled, independently deployable services.,System Design,Hard
+221,What is SQL injection and how to prevent it?,SQL injection is a vulnerability that allows malicious SQL code execution. Prevent by using prepared statements.,Security,Medium
+222,What are the differences between symmetric and asymmetric encryption?,Symmetric encryption uses the same key for encryption and decryption, while asymmetric uses public/private key pairs.,Security,Hard
+223,What is Docker and why is it used in DevOps?,Docker packages applications into containers for consistent deployment across environments.,DevOps,Medium
+224,Define a virtual DOM and its importance in front-end frameworks.,Virtual DOM improves performance by updating only changed elements instead of re-rendering the entire UI.,Front-end,Medium
+225,What is server-side rendering (SSR) and how does it differ from client-side rendering (CSR)?,SSR generates HTML on the server for faster loading, while CSR renders content in the browser.,Front-end,Hard
+226,What is an API gateway and its role in a microservices architecture?,An API gateway manages request routing, authentication, and load balancing in a microservices architecture.,Back-end,Medium
+227,Explain the difference between monolithic and microservices architecture.,Monolithic architecture has tightly integrated components, while microservices have independent services.,Back-end,Hard
+228,What is a full-stack developer and what skills are required?,A full-stack developer handles both front-end and back-end development, requiring knowledge of frameworks, databases, and APIs.,Full-stack,Medium
+229,Explain Big O notation and its importance in algorithm analysis.,Big O notation measures algorithm efficiency by describing worst-case time or space complexity.,Algorithms,Medium
+230,What is overfitting in machine learning and how to prevent it?,Overfitting occurs when a model performs well on training data but poorly on new data. Prevent by using regularization or cross-validation.,Machine Learning,Hard
+231,Explain the concept of supervised vs. unsupervised learning.,Supervised learning uses labeled data to train models, while unsupervised learning finds hidden patterns in unlabeled data.,Machine Learning,Medium
+232,What is a distributed system and how does it ensure fault tolerance?,A distributed system processes data across multiple nodes and ensures fault tolerance with replication and redundancy.,Distributed Systems,Hard
+233,What is a TCP handshake and its purpose in networking?,A TCP handshake establishes a connection between a client and server using SYN, SYN-ACK, and ACK packets.,Networking,Medium
+234,Explain the difference between HTTP and HTTPS.,HTTP is unencrypted, while HTTPS encrypts data using TLS/SSL for secure communication.,Networking,Easy
+235,What is a process and a thread in low-level systems?,A process is an independent execution unit, while threads share memory within a process for lightweight concurrency.,Low-level Systems,Medium
+236,What is indexing in databases and how does it improve query performance?,Indexing creates a data structure that allows faster retrieval of records, improving query performance.,Database Systems,Medium
+237,What is ETL in data engineering?,ETL stands for Extract, Transform, Load, a process that moves data from sources to storage for analysis.,Data Engineering,Medium
+238,What is the difference between machine learning and artificial intelligence?,AI is a broader concept of simulating human intelligence, while ML focuses on training models to learn patterns from data.,Artificial Intelligence,Easy
+239,What is reinforcement learning and where is it used?,Reinforcement learning trains models through trial and error, commonly used in robotics and game AI.,Artificial Intelligence,Hard
+240,What are GANs (Generative Adversarial Networks) and their applications?,GANs use two neural networks to generate realistic data, commonly used in image synthesis and deepfakes.,Artificial Intelligence,Hard
+241,What is Kubernetes and its role in container orchestration?,Kubernetes automates container deployment, scaling, and management, ensuring high availability and fault tolerance.,DevOps,Hard
+242,Explain the difference between SOAP and REST APIs.,SOAP uses XML with strict standards, while REST uses lightweight protocols like JSON and is more flexible.,Web Development,Medium
+243,What is a Content Delivery Network (CDN) and how does it work?,A CDN distributes content across multiple servers globally to improve website speed and reduce latency.,Web Development,Medium
+244,What is MVC architecture and its components?,MVC (Model-View-Controller) separates application logic, user interface, and control flow for modular design.,Web Development,Medium
+245,What is CRUD and why is it important in web applications?,CRUD stands for Create, Read, Update, and Delete, representing the basic operations of web applications.,Web Development,Easy
+246,What is SQL normalization and its different forms?,SQL normalization eliminates redundancy by dividing tables into smaller, logical units. Forms include 1NF, 2NF, 3NF, and BCNF.,Database and SQL,Medium
+247,What is ACID in databases and why is it important?,ACID stands for Atomicity, Consistency, Isolation, and Durability, ensuring reliable database transactions.,Database and SQL,Hard
+248,Explain the difference between NoSQL and SQL databases.,SQL databases are relational with structured schemas, while NoSQL databases handle unstructured data with flexible schemas.,Database Systems,Medium
+249,What is data warehousing and how does it work?,Data warehousing consolidates and stores large volumes of data for efficient querying and analysis.,Data Engineering,Medium
+250,What is the difference between OLTP and OLAP?,OLTP (Online Transaction Processing) handles real-time transactions, while OLAP (Online Analytical Processing) handles complex data analysis.,Database Systems,Hard
+251,What is cross-site scripting (XSS) and how to prevent it?,XSS injects malicious scripts into web applications. Prevent using input validation and output encoding.,Security,Medium
+252,What is cross-site request forgery (CSRF) and its mitigation techniques?,CSRF tricks a user into performing unwanted actions. Prevent by using CSRF tokens and enforcing origin checks.,Security,Hard
+253,What is a load balancer and how does it optimize performance?,A load balancer distributes incoming traffic across multiple servers to enhance performance and prevent downtime.,Networking,Medium
+254,Explain the differences between TCP and UDP protocols.,TCP is connection-oriented and reliable, while UDP is connectionless and faster but less reliable.,Networking,Medium
+255,What is DNS and how does it work?,DNS translates domain names into IP addresses to route internet traffic to the correct destination.,Networking,Easy
+256,What is deadlock in operating systems and how can it be prevented?,Deadlock occurs when processes wait indefinitely for resources. Prevent using deadlock avoidance or detection algorithms.,Low-level Systems,Hard
+257,What is paging and how does it improve memory management?,Paging divides memory into fixed-size blocks, reducing fragmentation and enabling efficient memory allocation.,Low-level Systems,Medium
+258,What is multithreading and how does it differ from multiprocessing?,Multithreading runs multiple threads within a process, while multiprocessing runs multiple processes independently.,Low-level Systems,Medium
+259,What is a distributed database and its advantages?,A distributed database stores data across multiple nodes, ensuring high availability, fault tolerance, and scalability.,Distributed Systems,Hard
+260,What is eventual consistency in distributed systems?,Eventual consistency ensures that updates in a distributed system propagate to all nodes over time.,Distributed Systems,Medium
+261,What is the CAP theorem and its implications for distributed databases?,The CAP theorem states that a distributed system can achieve only two out of Consistency, Availability, and Partition Tolerance.,Distributed Systems,Hard
+262,What is the difference between supervised and unsupervised machine learning?,Supervised learning uses labeled data for prediction, while unsupervised learning finds hidden patterns in unlabeled data.,Machine Learning,Easy
+263,What is a decision tree and how is it used in machine learning?,A decision tree splits data based on feature values to classify data points or make predictions.,Machine Learning,Medium
+264,What is the difference between regression and classification?,Regression predicts continuous values, while classification predicts categorical labels.,Machine Learning,Medium
+265,What is feature engineering and why is it important?,Feature engineering transforms raw data into meaningful features that improve model performance.,Machine Learning,Hard
+266,What is natural language processing (NLP) and its applications?,NLP enables computers to understand and process human language, used in chatbots and sentiment analysis.,Artificial Intelligence,Medium
+267,What is computer vision and where is it applied?,Computer vision enables machines to interpret and analyze visual data, applied in facial recognition and object detection.,Artificial Intelligence,Medium
+268,What is the difference between rule-based AI and machine learning?,Rule-based AI uses predefined rules, while machine learning adapts to data and improves over time.,Artificial Intelligence,Medium
+269,What is the role of RNNs in sequence data processing?,RNNs (Recurrent Neural Networks) handle sequential data by maintaining memory of previous states, useful in time-series prediction.,Artificial Intelligence,Hard
+270,What is anomaly detection and how is it used?,Anomaly detection identifies unusual patterns in data, used in fraud detection and network security.,Artificial Intelligence,Medium
+271,What is containerization and how does it differ from virtualization?,Containerization packages applications with dependencies, while virtualization emulates entire operating systems.,DevOps,Medium
+272,What is Helm in Kubernetes and its purpose?,Helm is a package manager for Kubernetes that automates deployment and management of applications.,DevOps,Medium
+273,What is Git branching and its best practices?,Git branching allows developers to work on features independently. Best practices include keeping branches short-lived and merging frequently.,Version Control,Medium
+274,What is Git rebase and how is it different from merging?,Git rebase integrates changes from one branch to another by rewriting history, while merging preserves commit history.,Version Control,Hard
+275,What is an API and its different types?,An API (Application Programming Interface) allows communication between systems. Types include REST, SOAP, and GraphQL.,Web Development,Easy
+276,What is serverless architecture and its benefits?,Serverless architecture abstracts infrastructure management, allowing automatic scaling and reduced costs.,Web Development,Medium
+277,What is the role of middleware in Express.js?,Middleware in Express.js processes requests before sending responses, commonly used for authentication and error handling.,Back-end,Medium
+278,What is dependency injection and how is it used?,Dependency injection provides dependencies to classes, improving code modularity and testability.,Back-end,Hard
+279,What is JWT (JSON Web Token) and its purpose?,JWT securely transmits information between parties, often used in authentication and authorization.,Back-end,Medium
+280,What is responsive web design and why is it important?,Responsive web design ensures that web pages adapt to different screen sizes for a better user experience.,Front-end,Easy
+281,What is CSS Flexbox and how does it work?,CSS Flexbox is a layout model that arranges elements in a container for responsive design.,Front-end,Medium
+282,What is a progressive web app (PWA) and its benefits?,PWAs combine web and mobile app features, offering offline support and fast performance.,Front-end,Medium
+283,What is two-phase commit protocol and its role in distributed transactions?,Two-phase commit protocol ensures atomicity in distributed transactions by committing changes across all nodes.,Distributed Systems,Hard
+284,What is message queuing and its importance in distributed systems?,Message queuing decouples producer and consumer processes, improving scalability and fault tolerance.,Distributed Systems,Medium
+285,What is Redis and how does it differ from traditional databases?,Redis is an in-memory key-value store optimized for high-speed data retrieval, unlike traditional disk-based databases.,Database Systems,Medium
+286,What is a B-tree and its use in database indexing?,A B-tree is a self-balancing tree used for efficient database indexing and search operations.,Database Systems,Hard
+287,What is anomaly-based intrusion detection and how does it work?,Anomaly-based IDS identifies suspicious behavior by detecting deviations from normal system behavior.,Security,Hard
+288,What is firewall and how does it enhance security?,A firewall monitors and controls network traffic to prevent unauthorized access.,Security,Easy
+289,What is Kubernetes pod and how does it manage containers?,A Kubernetes pod is the smallest deployable unit that manages one or more containers.,DevOps,Medium
+290,What is A/B testing and how is it used in software development?,A/B testing compares two versions of an application to measure performance and user engagement.,Software Testing,Medium
+291,What is regression testing and why is it important?,Regression testing ensures that code changes do not negatively impact existing functionality.,Software Testing,Medium
+292,What is stress testing and its significance?,Stress testing evaluates system performance under extreme conditions to identify breaking points.,Software Testing,Hard
+293,What is the difference between synchronous and asynchronous programming?,Synchronous programming blocks tasks until completion, while asynchronous programming allows parallel task execution.,General Programming,Medium
+294,What is a singleton design pattern and its purpose?,The singleton pattern ensures that a class has only one instance and provides a global point of access.,System Design,Easy
+295,What is SOLID principles and their importance?,SOLID principles promote clean, maintainable code by ensuring good object-oriented design.,System Design,Hard
+296,What is a variable in programming?,A variable is a named storage location in memory used to store and manipulate data.,General Programming,Easy
+297,What is the purpose of a for loop?,A for loop repeats a block of code a fixed number of times.,General Programming,Easy
+298,What is an array and how is it used?,An array is a collection of elements stored in contiguous memory locations, accessed by index.,General Programming,Easy
+299,What is a function and why is it used?,A function is a reusable block of code that performs a specific task.,General Programming,Easy
+300,What is the difference between print() and input() in Python?,print() displays output, while input() reads user input.,General Programming,Easy
+301,What is the purpose of the `if` statement?,The `if` statement executes code only if a specified condition is true.,General Programming,Easy
+302,What is an IDE and name two popular IDEs.,An IDE (Integrated Development Environment) provides tools for coding, debugging, and compiling. Examples: VS Code, PyCharm.,General Programming,Easy
+303,What is Git and why is it used?,Git is a version control system that tracks changes in code, enabling collaboration and version management.,Version Control,Easy
+304,What is the difference between push and pull in Git?,Push sends local changes to a remote repository, while pull retrieves changes from the remote repository.,Version Control,Easy
+305,What is a commit in Git?,A commit saves changes to the local repository with a description of the changes.,Version Control,Easy
+306,What is the purpose of an HTML `<div>` tag?,The `<div>` tag groups HTML elements together for styling and layout.,Web Development,Easy
+307,What is CSS and its purpose?,CSS (Cascading Style Sheets) is used to style HTML elements.,Web Development,Easy
+308,What is the role of JavaScript in web development?,JavaScript adds interactivity and dynamic behavior to web pages.,Web Development,Easy
+309,What is SQL and why is it used?,SQL (Structured Query Language) is used to query and manipulate relational databases.,Database and SQL,Easy
+310,What is the difference between SELECT and UPDATE in SQL?,SELECT retrieves data, while UPDATE modifies existing data in a table.,Database and SQL,Easy
+311,What is a primary key in a database?,A primary key uniquely identifies each record in a table.,Database and SQL,Easy
+312,What is the difference between HTTP and HTTPS?,HTTP is unencrypted, while HTTPS is secure using SSL/TLS encryption.,Security,Easy
+313,What is a firewall and how does it protect a network?,A firewall monitors and filters incoming and outgoing network traffic to prevent unauthorized access.,Security,Easy
+314,What is phishing and how can it be prevented?,Phishing is a cyber attack that tricks users into providing sensitive information. Prevent it by avoiding suspicious links and verifying email sources.,Security,Easy
+315,What is cloud computing and its benefits?,Cloud computing delivers services over the internet, offering scalability, flexibility, and cost efficiency.,DevOps,Easy
+316,What is Docker and why is it used?,Docker is a containerization platform that packages applications with dependencies to run consistently across environments.,DevOps,Easy
+317,What is Kubernetes and why is it important?,Kubernetes automates container management, scaling, and deployment.,DevOps,Easy
+318,What is the difference between frontend and backend?,Frontend handles user interface, while backend manages server-side logic and database interactions.,Full-stack,Easy
+319,What is the difference between GET and POST in HTTP?,GET retrieves data, while POST submits data to be processed by the server.,Web Development,Easy
+320,What is JSON and why is it used?,JSON (JavaScript Object Notation) is a lightweight format for storing and exchanging data.,Web Development,Easy
+321,What is a class in object-oriented programming?,A class is a blueprint for creating objects with attributes and methods.,General Programming,Easy
+322,What is the difference between a list and a tuple in Python?,A list is mutable, while a tuple is immutable.,General Programming,Easy
+323,What is inheritance in object-oriented programming?,Inheritance allows a class to acquire properties and behavior from another class.,General Programming,Easy
+324,What is an API and give an example?,An API (Application Programming Interface) allows communication between software systems. Example: REST API.,Web Development,Easy
+325,What is the purpose of a database index?,A database index improves query performance by speeding up data retrieval.,Database Systems,Easy
+326,What is a JOIN in SQL and why is it used?,A JOIN combines rows from multiple tables based on a related column.,Database and SQL,Easy
+327,What is a foreign key in a database?,A foreign key establishes a relationship between two tables.,Database and SQL,Easy
+328,What is a 404 error in web development?,A 404 error indicates that the requested resource is not found on the server.,Web Development,Easy
+329,What is the difference between HTML and XML?,HTML structures web content, while XML stores and transports data.,Web Development,Easy
+330,What is recursion and when should it be used?,Recursion is a technique where a function calls itself to solve a problem. Itâ€™s used in problems like tree traversal.,Algorithms,Easy
