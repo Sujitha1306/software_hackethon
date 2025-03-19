@@ -5,11 +5,11 @@ import speech_recognition as sr
 import joblib
 import difflib
 from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.metrics.pairwise import cosine_similarity
+from sklearn.metrics.pairwise import cosine_similarity2
 
 # 🎯 Load Sentiment Model and Vectorizer
-model_sentiment = joblib.load("sentiment_model.pkl")
-vectorizer_sentiment = joblib.load("vectorizer_sentiment.pkl")
+model_sentiment = joblib.load("logistic_regression_model.pkl")
+vectorizer_sentiment = joblib.load("vectorizer.pkl")
 
 # Initialize Text-to-Speech engine
 tts_engine = pyttsx3.init()

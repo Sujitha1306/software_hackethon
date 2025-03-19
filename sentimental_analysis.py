@@ -3,12 +3,19 @@ import numpy as np
 import re
 import time
 import matplotlib.pyplot as plt
-from sklearn.model_selection import train_test_split
+import seaborn as sns
+import joblib
+import sys
+
+from sklearn.model_selection import train_test_split, GridSearchCV
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.naive_bayes import MultinomialNB
-from sklearn.metrics import classification_report, accuracy_score, confusion_matrix
-import seaborn as sns
-import sys
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import (
+    accuracy_score, classification_report, confusion_matrix, mean_squared_error, r2_score
+)
+
+sys.stdout.reconfigure(encoding='utf-8')
 
 # 🎉 Loading Animation Function
 def loading_animation(duration=5):
@@ -24,36 +31,16 @@ print("📥 Loading dataset...")
 columns = ['target', 'id', 'date', 'flag', 'user', 'text']
 sentiment_df = pd.read_csv("traindata.csv", encoding="ISO-8859-1", names=columns)
 
-# 🔍 **Step 1: Initial stats before preprocessing**
-print(f"\n🔍 Initial Data Shape: {sentiment_df.shape}")
-print(f"📊 Column Names: {list(sentiment_df.columns)}")
-
-# 📊 **Step 2: Keep only 'text' and 'target' columns**
-print("\n📊 Step 2: Keeping only relevant columns...")
-columns_dropped = list(set(sentiment_df.columns) - {'target', 'text'})
+# 📊 Keep only relevant columns
 sentiment_df = sentiment_df[['target', 'text']]
 
-# 🧹 **Step 3: Count duplicates and null values before dropping**
-num_duplicates = sentiment_df.duplicated().sum()
-num_nulls = sentiment_df.isnull().sum().sum()
-
-# 🧹 **Step 4: Remove duplicates and handle missing values**
-print(f"\n🧹 Removing {num_duplicates} duplicate rows...")
-print(f"🧹 Handling {num_nulls} null values...")
-sentiment_df.drop_duplicates(inplace=True)
-sentiment_df.dropna(inplace=True)
-
-# 🔄 **Step 5: Convert target labels (0 -> Negative, 4 -> Positive, 2 -> Neutral)**
-print("\n🔄 Step 5: Converting target labels...")
+# 🔄 Convert target labels (0 -> Negative, 4 -> Positive, 2 -> Neutral)
 sentiment_df['target'] = sentiment_df['target'].replace({0: 0, 4: 1, 2: 2})
 
-# ⚠️ **Step 6: Drop neutral tweets to focus on binary classification**
-print("⚠️ Dropping neutral tweets...")
-initial_rows = len(sentiment_df)
+# ⚠️ Drop neutral tweets (keep only binary classification)
 sentiment_df = sentiment_df[sentiment_df['target'] != 2]
-rows_dropped = initial_rows - len(sentiment_df)
 
-# 🧼 **Step 7: Text cleaning function**
+# 🧼 **Text cleaning function**
 def clean_text(text):
     text = re.sub(r"http\S+|www\S+|https\S+", '', text, flags=re.MULTILINE)  # Remove URLs
     text = re.sub(r"@\w+|\#", '', text)  # Remove mentions and hashtags
@@ -61,66 +48,121 @@ def clean_text(text):
     text = text.lower()  # Convert to lowercase
     return text
 
-# 🧽 **Step 8: Apply text cleaning**
-print("🧽 Cleaning text data...")
+# 🧽 Apply text cleaning
 sentiment_df['text'] = sentiment_df['text'].apply(clean_text)
 
-# 📊 **Step 9: Splitting data into training and test sets**
-print("📊 Splitting data into training and test sets...")
+# 📊 **Splitting data into training and test sets**
 X = sentiment_df['text']
 y = sentiment_df['target']
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
-# 🔎 **Step 10: Vectorizing text using TF-IDF**
-print("🔎 Vectorizing text using TF-IDF...")
-vectorizer_sentiment = TfidfVectorizer(max_features=10000, ngram_range=(1, 2))
-X_train_vec = vectorizer_sentiment.fit_transform(X_train)
-X_test_vec = vectorizer_sentiment.transform(X_test)
+# 🔎 **Vectorizing text using TF-IDF**
+vectorizer = TfidfVectorizer(max_features=10000, ngram_range=(1, 2))
+X_train_vec = vectorizer.fit_transform(X_train)
+X_test_vec = vectorizer.transform(X_test)
 
-# 🚀 **Step 11: Training Naive Bayes Model**
-print("🚀 Training Naive Bayes model...")
-loading_animation(duration=5)
-model_sentiment = MultinomialNB()
-model_sentiment.fit(X_train_vec, y_train)
+# 🎯 **Hyperparameter Tuning for Naïve Bayes using GridSearchCV**
+print("\n🎯 Performing hyperparameter tuning on Naïve Bayes...")
+param_grid_nb = {'alpha': [0.1, 0.5, 1.0, 1.5, 2.0]}  # Different alpha values to test
+nb_model = MultinomialNB()
 
-# 📈 **Step 12: Evaluating the model**
-print("📈 Evaluating model performance...")
-y_pred = model_sentiment.predict(X_test_vec)
+grid_search_nb = GridSearchCV(estimator=nb_model, param_grid=param_grid_nb, cv=5, scoring='accuracy', n_jobs=-1)
+grid_search_nb.fit(X_train_vec, y_train)
 
-# ✅ **Display Accuracy**
-accuracy = accuracy_score(y_test, y_pred)
-print(f"\n✅ Model Accuracy: {accuracy:.2f}")
-print("\n📊 Classification Report:\n", classification_report(y_test, y_pred))
+# ✅ Best model after tuning
+best_nb_model = grid_search_nb.best_estimator_
+best_alpha = grid_search_nb.best_params_['alpha']
+print(f"✅ Best Alpha for Naïve Bayes: {best_alpha}")
+print(f"✅ Best Model Accuracy after tuning: {grid_search_nb.best_score_:.4f}")
 
-# 📊 **Step 13: Plot Confusion Matrix**
-conf_matrix = confusion_matrix(y_test, y_pred)
-plt.figure(figsize=(6, 6))
-sns.heatmap(conf_matrix, annot=True, fmt='d', cmap='Blues', xticklabels=['Negative', 'Positive'], yticklabels=['Negative', 'Positive'])
-plt.xlabel("Predicted Label")
-plt.ylabel("True Label")
-plt.title("Confusion Matrix")
+# 🚀 **Train Logistic Regression Model**
+print("\n🚀 Training Logistic Regression model...")
+loading_animation(duration=3)
+lr_model = LogisticRegression(max_iter=200)
+lr_model.fit(X_train_vec, y_train)
+
+# 📈 **Evaluate Models**
+print("\n📈 Evaluating model performance...")
+
+# Predictions
+y_pred_nb = best_nb_model.predict(X_test_vec)
+y_pred_lr = lr_model.predict(X_test_vec)
+
+# Accuracy
+accuracy_nb = accuracy_score(y_test, y_pred_nb)
+accuracy_lr = accuracy_score(y_test, y_pred_lr)
+
+# Classification Reports
+report_nb = classification_report(y_test, y_pred_nb)
+report_lr = classification_report(y_test, y_pred_lr)
+
+# Confusion Matrices
+conf_matrix_nb = confusion_matrix(y_test, y_pred_nb)
+conf_matrix_lr = confusion_matrix(y_test, y_pred_lr)
+
+# RMSE (Root Mean Squared Error)
+rmse_nb = np.sqrt(mean_squared_error(y_test, y_pred_nb))
+rmse_lr = np.sqrt(mean_squared_error(y_test, y_pred_lr))
+
+# R² Score
+r2_nb = r2_score(y_test, y_pred_nb)
+r2_lr = r2_score(y_test, y_pred_lr)
+
+# ✅ **Display Results**
+print(f"\n✅ Naïve Bayes (Tuned) Accuracy: {accuracy_nb:.4f}")
+print("\n📊 Naïve Bayes Classification Report:\n", report_nb)
+
+print(f"\n✅ Logistic Regression Accuracy: {accuracy_lr:.4f}")
+print("\n📊 Logistic Regression Classification Report:\n", report_lr)
+
+print(f"\n📊 RMSE (Naïve Bayes): {rmse_nb:.4f} | R² Score: {r2_nb:.4f}")
+print(f"\n📊 RMSE (Logistic Regression): {rmse_lr:.4f} | R² Score: {r2_lr:.4f}")
+
+# 📊 **Plot Confusion Matrices**
+fig, axes = plt.subplots(1, 2, figsize=(12, 5))
+sns.heatmap(conf_matrix_nb, annot=True, fmt='d', cmap='Blues', ax=axes[0])
+axes[0].set_title("Naïve Bayes Confusion Matrix")
+axes[0].set_xlabel("Predicted Label")
+axes[0].set_ylabel("True Label")
+
+sns.heatmap(conf_matrix_lr, annot=True, fmt='d', cmap='Greens', ax=axes[1])
+axes[1].set_title("Logistic Regression Confusion Matrix")
+axes[1].set_xlabel("Predicted Label")
+axes[1].set_ylabel("True Label")
+
+plt.tight_layout()
 plt.show()
 
-# 📊 **Summary Report**
-print("\n📚 **Summary Report:**")
-print(f"🔢 Initial Rows: {initial_rows}")
-print(f"🗑️ Rows Dropped (Neutral Tweets): {rows_dropped}")
-print(f"🔄 Duplicates Removed: {num_duplicates}")
-print(f"⚠️ Null Values Handled: {num_nulls}")
-print(f"📉 Columns Dropped: {', '.join(columns_dropped)}")
-print(f"📊 Final Data Shape: {sentiment_df.shape}")
-# 💾 **Step 14: Save Model and Vectorizer**
-print("\n💾 Saving the trained model and vectorizer...")
+# 📊 **Comparison Bar Chart**
+metrics = ["Accuracy", "RMSE", "R² Score"]
+nb_values = [accuracy_nb, rmse_nb, r2_nb]
+lr_values = [accuracy_lr, rmse_lr, r2_lr]
 
-# Save model using joblib
-import joblib
-model_path = "sentiment_model.pkl"
-vectorizer_path = "vectorizer_sentiment.pkl"
+x = np.arange(len(metrics))
+width = 0.35
 
-# Save the Naive Bayes model
-joblib.dump(model_sentiment, model_path)
-print(f"✅ Model saved to {model_path}")
+fig, ax = plt.subplots(figsize=(8, 5))
+rects1 = ax.bar(x - width/2, nb_values, width, label='Naïve Bayes (Tuned)', color='blue')
+rects2 = ax.bar(x + width/2, lr_values, width, label='Logistic Regression', color='green')
 
-# Save the TF-IDF vectorizer
-joblib.dump(vectorizer_sentiment, vectorizer_path)
-print(f"✅ Vectorizer saved to {vectorizer_path}")
+ax.set_xlabel("Metrics")
+ax.set_ylabel("Score")
+ax.set_title("Model Performance Comparison")
+ax.set_xticks(x)
+ax.set_xticklabels(metrics)
+ax.legend()
+
+for rect in rects1 + rects2:
+    height = rect.get_height()
+    ax.annotate(f'{height:.2f}', xy=(rect.get_x() + rect.get_width() / 2, height),
+                xytext=(0, 3), textcoords="offset points",
+                ha='center', va='bottom')
+
+plt.show()
+
+# 💾 **Save Models**
+joblib.dump(best_nb_model, "naive_bayes_model.pkl")
+joblib.dump(lr_model, "logistic_regression_model.pkl")
+joblib.dump(vectorizer, "vectorizer.pkl")
+
+print("\n✅ Models and vectorizer saved successfully!")
