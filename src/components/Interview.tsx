@@ -15,18 +15,29 @@ const Interview: React.FC = () => {
   const [analysis, setAnalysis] = useState<AnswerAnalysis | null>(null);
   const [results, setResults] = useState<InterviewResults | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    if (!settings) {
+      navigate('/');
+      return;
+    }
     startInterview();
   }, []);
 
   const startInterview = async () => {
     try {
       setIsLoading(true);
-      const response = await axios.post('http://127.0.0.1:5000/api/interview/start', settings);
+      setError(null);
+      const response = await axios.post('/api/interview/start', {
+        categories: settings.categories,
+        difficultyLevels: settings.difficultyLevels,
+        numQuestions: settings.numQuestions
+      });
       setCurrentQuestion(response.data);
     } catch (error) {
       console.error('Error starting interview:', error);
+      setError('Failed to start the interview. Please try again.');
     } finally {
       setIsLoading(false);
     }
@@ -37,6 +48,7 @@ const Interview: React.FC = () => {
       const recognition = new (window as any).webkitSpeechRecognition();
       recognition.continuous = false;
       recognition.interimResults = false;
+      recognition.lang = 'en-US';
 
       recognition.onstart = () => {
         setIsListening(true);
@@ -45,6 +57,11 @@ const Interview: React.FC = () => {
       recognition.onresult = (event: any) => {
         const transcript = event.results[0][0].transcript;
         setAnswer(prev => prev + ' ' + transcript);
+      };
+
+      recognition.onerror = (event: any) => {
+        console.error('Speech recognition error:', event.error);
+        setIsListening(false);
       };
 
       recognition.onend = () => {
@@ -58,15 +75,23 @@ const Interview: React.FC = () => {
   };
 
   const speakText = (text: string) => {
-    const utterance = new SpeechSynthesisUtterance(text);
-    window.speechSynthesis.speak(utterance);
+    if ('speechSynthesis' in window) {
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = 'en-US';
+      window.speechSynthesis.speak(utterance);
+    } else {
+      alert('Text-to-speech is not supported in this browser.');
+    }
   };
 
   const handleSubmit = async () => {
+    if (!answer.trim()) return;
+
     try {
       setIsLoading(true);
-      const response = await axios.post('http://127.0.0.1:5000/api/interview/submit', {
-        answer
+      setError(null);
+      const response = await axios.post('/api/interview/submit', {
+        answer: answer.trim()
       });
 
       if (response.data.interviewCompleted) {
@@ -78,6 +103,7 @@ const Interview: React.FC = () => {
       }
     } catch (error) {
       console.error('Error submitting answer:', error);
+      setError('Failed to submit answer. Please try again.');
     } finally {
       setIsLoading(false);
     }
@@ -86,7 +112,26 @@ const Interview: React.FC = () => {
   if (isLoading) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <Loader className="w-8 h-8 animate-spin text-blue-500" />
+        <div className="text-center">
+          <Loader className="w-12 h-12 animate-spin text-blue-500 mx-auto mb-4" />
+          <p className="text-gray-600">Loading...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="bg-white p-8 rounded-lg shadow-md text-center">
+          <p className="text-red-500 mb-4">{error}</p>
+          <button
+            onClick={() => navigate('/')}
+            className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded"
+          >
+            Return to Home
+          </button>
+        </div>
       </div>
     );
   }
@@ -106,7 +151,7 @@ const Interview: React.FC = () => {
             </div>
 
             <div className="bg-purple-50 p-6 rounded-lg">
-              <h2 className="text-xl font-semibold mb-2">Overall Sentiment</h2>
+              <h2 className="text-xl font-semibold mb-2">Overall Performance</h2>
               <p className="text-2xl font-semibold text-purple-600">
                 {results.overallSentiment}
               </p>
@@ -140,7 +185,7 @@ const Interview: React.FC = () => {
               </h2>
               <button
                 onClick={() => speakText(currentQuestion.question)}
-                className="text-blue-500 hover:text-blue-600"
+                className="text-blue-500 hover:text-blue-600 transition-colors"
                 title="Listen to question"
               >
                 <Volume2 className="w-6 h-6" />
@@ -154,13 +199,13 @@ const Interview: React.FC = () => {
                 value={answer}
                 onChange={(e) => setAnswer(e.target.value)}
                 placeholder="Type your answer here..."
-                className="w-full h-32 p-4 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full h-32 p-4 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
               />
 
               <div className="flex space-x-4">
                 <button
                   onClick={handleSpeechToText}
-                  className={`flex items-center space-x-2 px-4 py-2 rounded-lg ${
+                  className={`flex items-center space-x-2 px-4 py-2 rounded-lg transition-colors ${
                     isListening
                       ? 'bg-red-500 text-white'
                       : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
@@ -173,7 +218,7 @@ const Interview: React.FC = () => {
                 <button
                   onClick={handleSubmit}
                   disabled={!answer.trim()}
-                  className={`px-6 py-2 rounded-lg font-semibold ${
+                  className={`px-6 py-2 rounded-lg font-semibold transition-colors ${
                     answer.trim()
                       ? 'bg-blue-500 text-white hover:bg-blue-600'
                       : 'bg-gray-300 text-gray-500 cursor-not-allowed'
