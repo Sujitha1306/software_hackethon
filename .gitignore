@@ -1,9 +1,8 @@
 # Ignore dataset and large files
 traindata.csv
-*.csv
 *.tsv
 *.xlsx
-*.json
+
 *.parquet
 
 # Ignore compressed and archive files
@@ -30,7 +29,6 @@ venv/
 # Ignore Node.js dependencies
 node_modules/
 npm-debug.log
-package-lock.json
 
 # Ignore environment and build files
 .env

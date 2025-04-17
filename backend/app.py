@@ -12,7 +12,7 @@ CORS(app)
 app.secret_key = os.urandom(24)  # For session management
 
 # Load models and data
-df = pd.read_csv("SoftwareQuestions.csv", encoding="ISO-8859-1")
+df = pd.read_csv("Software Questions.csv", encoding="ISO-8859-1")
 model_sentiment = joblib.load("logistic_regression_model.pkl")
 vectorizer_sentiment = joblib.load("vectorizer.pkl")
 vectorizer = joblib.load("tfidf_model.pkl")
